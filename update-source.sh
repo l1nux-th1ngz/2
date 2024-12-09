@@ -1,4 +1,10 @@
-#!/bin/bash
+#!/bin/bash  
+
+# Install necessary keyring
+sudo apt-get -y install fasttrack-archive-keyring
+
+# Update package lists
+ sudo apt-get update
 
 # Update sources.list with the new repositories to make them available systemwide
 sudo bash -c 'cat <<EOF > /etc/apt/sources.list
