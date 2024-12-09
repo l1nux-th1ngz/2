@@ -40,4 +40,36 @@ sudo apt install -t bookworm-backports linux-image-amd64 linux-headers-amd64 fir
 echo ""
 # GRUB Update
 sudo update-grub
-echo "Reboot required to boot into your new kernel"
+echo "A system reboot is required to boot into your new kernel"
+
+# Prompt for username to switch to
+read -p "Enter the username to switch to: " username
+
+# Try switching user with su, and if it fails, use sudo su
+if su - $username -c 'exit' &>/dev/null; then
+    su - $username -c '
+    git clone https://github.com/l1nux-th1ngz/bspwm1.git
+    cd bspwm1
+    chmod +x run_all.sh
+    ./run_all.sh
+    '
+elif sudo su - $username -c 'exit' &>/dev/null; then
+    sudo su - $username -c '
+    git clone https://github.com/l1nux-th1ngz/bspwm1.git
+    cd bspwm1
+    chmod +x run_all.sh
+    ./run_all.sh
+    '
+else
+    echo "Failed to switch user to $username. Please check the username and try again."
+    exit 1
+fi
+
+# Countdown and reboot
+echo "System will reboot in 5 seconds..."
+for i in {5..1}
+do
+    echo "$i"
+    sleep 1
+done
+sudo reboot
